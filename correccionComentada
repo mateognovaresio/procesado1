@@ -1,0 +1,234 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+void mostrarMenu();
+/**
+* Muestra el menú principal al usuario.
+*/
+
+void procesarOpcion(int opcion, int num1, int num2, int* cantidadOperaciones);
+/**
+* Procesa la opción seleccionada por el usuario y realiza la operación correspondiente.
+* 
+* @param opcion La opción seleccionada por el usuario (1-6)
+* @param num1 El primer número ingresado
+* @param num2 El segundo número ingresado
+* @param cantidadOperaciones Un puntero a la cantidad de operaciones realizadas
+*/
+
+long factorial(int num);
+/**
+* Calcula el factorial de un número.
+* 
+* @param num El número ingresado
+* @return El factorial del número, o -1 si el número es negativo
+*/
+
+bool esPrimo(int num);
+/**
+* Verifica si un número es primo.
+* 
+* @param num El número ingresado
+* @return true (1) si el número es primo, false (0) en caso contrario
+*/
+
+void mostrarEsPrimo(int num1, int num2);
+/**
+* Muestra los números primos entre los dos numeros ingresados.
+* 
+* @param num1 El primer número ingresado
+* @param num2 El segundo número ingresado
+*/
+
+void mostrarFactorial(int num1, int num2);
+/**
+* Muestra el factorial de cada número ingresado.
+* 
+* @param num1 El primer número ingresado
+* @param num2 El segundo número ingresado
+*/
+
+void mostrarImpares(int num1, int num2);
+/**
+* Muestra los números impares entre los dos números ingresados.
+* 
+* @param num1 El primer número ingresado
+* @param num2 El segundo número ingresado
+*/
+
+void mostrarDivisores(int num1, int num2);
+/**
+* Muestra los divisores de cada número ingresado.
+* 
+* @param num1 El primer número ingresado
+* @param num2 El segundo número ingresado
+*/
+
+void mostrarSiguienteAnterior(int num1, int num2);
+/**
+* Muestra el siguiente número después del mayor número ingresado y el número anterior al menor número ingresado.
+* 
+* @param El primer número ingresado
+* @param num2 El segundo número ingresado
+*/
+
+int main() {
+	system("color 0B"); // Cambia el color de la consola para mostrar el menú
+	printf("\n**** B I E N V E N I D O / A ****\n");
+	int num1, num2, opcion;
+	int cantidadOperaciones = 0;
+	bool flag = true;
+	
+	while (flag == true) {
+		mostrarMenu();
+		scanf("%d", &opcion);		
+		if (opcion > 6) {
+			printf("\nOpción no válida. Saliendo...\n");
+			return 0;
+		}
+		if (opcion == 6) {
+			printf("\nSaliendo...\n");
+			return 0;
+		}
+		printf("\nIngrese dos números enteros: ");
+		scanf("%d %d", &num1, &num2);
+		
+		procesarOpcion(opcion, num1, num2, &cantidadOperaciones);
+	}
+	printf("\nGracias por usar la calculadora!\n");
+	return 0;
+}
+
+void mostrarMenu() {
+	printf("\n***** C A L C U L A D O R A *****\n");
+	printf("1: **Impares comprendidos entre los dos números ingresados**\n");
+	printf("2: **Siguiente número del mayor y anterior número del menor**\n");
+	printf("3: **¿Número primo?**\n");
+	printf("4: **Factorial de cada número**\n");
+	printf("5: **Divisores de cada número**\n");
+	printf("6: **Salir**\n");
+	printf("*********************************\n");
+	printf("Elija una opción: ");
+}
+
+void procesarOpcion(int opcion, int num1, int num2, int* cantidadOperaciones) {
+	switch (opcion) {
+	case 1:
+		mostrarImpares(num1, num2);
+		(*cantidadOperaciones)++;
+		break;
+	case 2:
+		mostrarSiguienteAnterior(num1, num2);
+		(*cantidadOperaciones)++;
+		break;
+	case 3:
+		mostrarEsPrimo(num1, num2);
+		(*cantidadOperaciones)++;
+		break;
+	case 4:
+		mostrarFactorial(num1, num2);
+		(*cantidadOperaciones)++;
+		break;
+	case 5:
+		mostrarDivisores(num1, num2);
+		(*cantidadOperaciones)++;
+		break;
+	default:
+		printf("\nOpción no válida. Por favor, intente de nuevo.\n");
+		break;
+	}
+	
+	printf("\nCantidad de operaciones realizadas: %d\n", *cantidadOperaciones);
+}
+
+void mostrarImpares(int num1, int num2) {
+	int menor, mayor;
+	if (num1 < num2) {
+		menor = num1;
+		mayor = num2;
+	} else {
+		menor = num2;
+		mayor = num1;
+	}
+	printf("Números impares entre %d y %d: ", menor, mayor);
+	for (int i = menor + 1; i < mayor; i++) {
+		if (i % 2 != 0) {
+			printf("%d ", i);
+		}
+	}
+	printf("\n");
+}
+
+void mostrarSiguienteAnterior(int num1, int num2) {
+	int menor, mayor;
+	if (num1 < num2) {
+		menor = num1;
+		mayor = num2;
+	} else {
+		menor = num2;
+		mayor = num1;
+	}
+	printf("Siguiente número del mayor (%d): %d\n", mayor, mayor + 1);
+	printf("Anterior número del menor (%d): %d\n", menor, menor - 1);
+}
+
+bool esPrimo(int num) {
+	if (num <= 1) return false;
+	for (int i = 2; i * i <= num; i++) {
+		if (num % i == 0) return false;
+	}
+	return true;
+}
+
+void mostrarEsPrimo(int num1, int num2) {
+	if (esPrimo(num1)) {
+		printf("%d es primo: Sí\n", num1);
+	} else {
+		printf("%d es primo: No\n", num1);
+	}
+	if (esPrimo(num2)) {
+		printf("%d es primo: Sí\n", num2);
+	} else {
+		printf("%d es primo: No\n", num2);
+	}
+}
+
+long factorial(int num) {
+	if (num < 0) return -1;  // No existe el factorial de un número negativo
+	long result = 1; 
+	for (int i = 1; i <= num; i++) {
+		result *= i;
+	}
+	return result;
+}
+
+void mostrarFactorial(int num1, int num2) {
+	if (factorial(num1) < 0) {
+		printf("\nNo existe el factorial del número 1!");
+		printf("\nFactorial de %d: %ld\n", num2, factorial(num2));
+	} else if (factorial(num2) < 0) {
+		printf("\nFactorial de %d: %ld\n", num1, factorial(num1));
+		printf("\nNo existe el factorial del número 2!");
+	} else {
+		printf("\nFactorial de %d: %ld\n", num1, factorial(num1));
+		printf("\nFactorial de %d: %ld\n", num2, factorial(num2));
+	}
+}
+
+void mostrarDivisores(int num1, int num2) {
+	printf("Divisores de %d: ", num1);
+	for (int i = 1; i <= num1; i++) {
+		if (num1 % i == 0) {
+			printf("%d ", i);
+		}
+	}
+	printf("\n");
+	printf("Divisores de %d: ", num2);
+	for (int i = 1; i <= num2; i++) {
+		if (num2 % i == 0) {
+			printf("%d ", i);
+		}
+	}
+	printf("\n");
+}
